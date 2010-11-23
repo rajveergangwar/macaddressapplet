@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!--
-  ~ Copyright (c) 2010. Agwego Enterprises Inc.
+  ~ Copyright (c) 2008-2010. Agwego Enterprises Inc.
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,6 @@
   ~ THE SOFTWARE.
   ~
   ~ If you modify this software a credit would be nice
-  -
-  - $Id$
-  -
-  - Author: Tim Desjardins
   -->
 
 <project name="macaddressapplet" basedir="." default="usage">
@@ -130,7 +126,6 @@
     </target>
 
     <target name="package" depends="signjar" description="Package fuzz tester">
-        <mkdir dir="${package.dir}"/>
         <copy file="macaddressapplet.jar" todir="${web.dir}"/>
     </target>
 
@@ -176,19 +171,16 @@
 
     <target name="doc" description="Generate the javadoc">
         <javadoc
-            packagenames="com.agwego.*"
-            sourcepath="${src.dir}"
+            sourcefiles="${src.dir}/MacAddressApplet.java"
             destdir="${doc.dir}/api"
             access="private"
             author="true"
             version="true"
             use="true"
-            windowtitle="FuzzTester API">
+            windowtitle="MacAddressApplet API">
             <link href="http://java.sun.com/javase/6/docs/api/"/>
-            <link href="http://google-gson.googlecode.com/svn/tags/1.3/docs/javadocs/"/>
-            <link href="http://kentbeck.github.com/junit/javadoc/latest/"/>
-            
-            <bottom><![CDATA[<i>Copyright &#169; 2010 Agwego Enterprise Inc. Tim Desjardins - All Rights Reserved.</i>]]></bottom>
+
+            <bottom><![CDATA[<i>Copyright &#169; 2008-2010 Agwego Enterprise Inc. Tim Desjardins - All Rights Reserved.</i>]]></bottom>
         </javadoc>
     </target>
 </project>
