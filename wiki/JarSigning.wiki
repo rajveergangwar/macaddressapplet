@@ -4,6 +4,6 @@
 
 Singe Java 6 update 22 which closed the native access hole, the Mac Address Applet now needs to be signed with a valid certificate to work properly. Versions prior to updated 22 will still work whether the jar is signed or not.
 
-= Details =
+== Discussion ==
 
 If you are planning to use this applet or a derivative to commercial applications you will most likely want to use a real code signing certificate to sign your jar file, otherwise you can use a self signed certificate. You can obtain code signing certificates from many sources like [https://www.verisign.com/ VeriSign] or [http://godaddy.com/ Go Daddy] for example.
