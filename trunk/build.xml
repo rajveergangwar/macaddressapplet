@@ -1,0 +1,194 @@
+<?xml version="1.0"?>
+
+<!--
+  ~ Copyright (c) 2010. Agwego Enterprises Inc.
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  ~
+  ~ If you modify this software a credit would be nice
+  -
+  - $Id$
+  -
+  - Author: Tim Desjardins
+  -->
+
+<project name="macaddressapplet" basedir="." default="usage">
+    <property environment="env"/>
+	<!--property file="${basedir}/opt/personal/${env.USER}/build.${env.HOSTNAME}.properties"/-->
+	<property file="build.properties"/>
+	<property name="name" value="fuzztester"/>
+
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="doc.dir" value="doc"/>
+
+    <property name="out.prod.dir" value="${build.dir}"/>
+    <property name="web.dir" value="web"/>
+    <property name="package.dir" value="package"/>
+
+    <mkdir dir="${build.dir}"/>
+
+    <fileset dir="${basedir}/lib" id="package-dependency-libs">
+        <exclude name="junit*"/>
+        <exclude name="*src*"/>
+        <include name="*.jar"/>
+        <!--include name="gson.LICENSE"/-->
+        <!--include name="commons.LICENSE.txt"/-->               
+    </fileset>
+
+    <fileset dir="${basedir}/lib" id="package-dependency-collateral">
+        <include name="gson.LICENSE"/>
+        <include name="commons.LICENSE.txt"/>
+    </fileset>
+
+    <path id="classpath-prod">
+        <pathelement path="${out.prod.dir}"/>
+    </path>
+
+    <target name="usage" > <!-- depends="get-revision" -->
+        <echo message=""/>
+        <echo message="${name} build file"/>
+        <echo message="------------------------------------"/>
+        <echo message=""/>
+        <echo message="Available targets are:"/>
+        <echo message=""/>
+
+        <echo message="build                 --> compile the application"/>
+        <echo message="jar                   --> create the jar"/>
+        <echo message="package               --> sign the jar and create 'web' package "/>
+
+        <echo message="doc                   --> create javadoc"/>
+
+        <echo message="clean                 --> cleanup"/>
+        <echo message="spotless              --> revert to pristine"/>
+
+        <echo message=""/>
+
+	    <echo message="HOSTNAME: ${env.HOSTNAME}"/>
+	    <echo message="USER: ${env.USER}"/>
+	    <echo message="basedir: ${basedir}"/>
+        <!--echo message="revision: ${revision.number}"/-->
+    </target>
+
+    <!-- release properties -->
+	<!--target name="release_properties" depends="get-revision" description="build the WAR file for release embeds build information">
+		<echo message="revision.number = ${revision.number}" />
+	    <touch file="${out.prod.dir}/build_tag.properties"/>
+	    <propertyfile comment="Build Information" file="${out.prod.dir}/build_tag.properties">
+		    <entry key="build.date" type="date" pattern="EEEE MMM dd, yyyy" value="now"/>
+		    <entry key="build.timestamp" type="date" pattern="yyyy-MM-dd'T'HH:mm:ss" value="now"/>
+		    <entry key="build.user.name" value="${user.name}"/>
+		    <entry key="build.computer" value="${env.COMPUTERNAME}"/>
+		    <entry key="build.revision_number" value="${revision.number}"/>
+            <entry key="fuzz.version" value="${fuzz.version}"/>
+	    </propertyfile>
+	</target-->
+
+    <target name="build" description="Compile main source tree java files">
+        <mkdir dir="${out.prod.dir}"/>
+        <javac destdir="${out.prod.dir}" source="1.5" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
+            <src path="${src.dir}"/>
+            <classpath refid="classpath-prod"/>
+
+            <!--compilerarg  value="-Xlint"/-->
+        </javac>
+        <copy file="${src.dir}/log4j.properties" tofile="${out.prod.dir}/log4j.properties" overwrite="true"/>
+    </target>
+
+    <target name="jar" depends="build" description="Create the archive">
+        <jar destfile="macaddressapplet.jar" basedir="${out.prod.dir}"/>
+    </target>
+
+    <target name="signjar" depends="jar" description="Package fuzz tester">
+        <signjar jar="macaddressapplet.jar"
+                    signedjar="${web.dir}/macaddressapplet.jar"
+                    alias="${codesign.alias}"
+                    storepass="${codesign.storePassword}"
+                    keystore="${codesign.keystore}"
+                    keypass="${codesign.keyPassword}"
+            />
+        <!-- You can include these signjar attributes if you wish to timestamp your jar
+            tsaurl="${codesign.tsaurl}"
+            tsacert="${codesign.tsacert}"
+         -->
+    </target>
+
+    <target name="package" depends="signjar" description="Package fuzz tester">
+        <mkdir dir="${package.dir}"/>
+        <copy file="macaddressapplet.jar" todir="${web.dir}"/>
+    </target>
+
+    <target name="clean" description="Clean output directories">
+        <delete quiet="false" failonerror="false">
+            <fileset dir="${build.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+        </delete>
+        <delete file="macaddressapplet.jar"/>
+        <delete file="${web.dir}/macaddressapplet.jar"/>
+	    <touch file="${out.prod.dir}/build_tag.properties"/>
+    </target>
+
+	<target name="spotless" depends="clean" description="Clean and revert to pristine">
+	    <delete quiet="false">
+	        <fileset dir="${basedir}">
+	            <include name="**/svn-commit.tmp*"/>
+                <include name="macaddressapplet.jar"/>
+	        </fileset>
+			<fileset dir="${out.prod.dir}">
+	            <include name="build_tag.properties"/>
+            </fileset>
+	    </delete>
+        <delete dir="${build.dir}" includeEmptyDirs="true"/>
+        <delete dir="${package.dir}" includeEmptyDirs="true"/>
+	</target>
+
+	<!--target name="get-revision" description="Sets property 'revision.number' to the head svn revision number">
+        <property name="revision" value="HEAD"/>
+
+        <!- - find out revision number of the current working dir - ->
+        <exec executable="svnversion" outputproperty="svnlog.out">
+            <arg line="-n"/>
+        </exec>
+
+        <!- - need ant-contrib.jar for this in lib dir of ant install - ->
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+        <propertyregex property="revision.number" input="${svnlog.out}" select="\1">
+            <regexp pattern="([0-9]*).+"/>
+        </propertyregex>
+    </target-->
+
+    <target name="doc" description="Generate the javadoc">
+        <javadoc
+            packagenames="com.agwego.*"
+            sourcepath="${src.dir}"
+            destdir="${doc.dir}/api"
+            access="private"
+            author="true"
+            version="true"
+            use="true"
+            windowtitle="FuzzTester API">
+            <link href="http://java.sun.com/javase/6/docs/api/"/>
+            <link href="http://google-gson.googlecode.com/svn/tags/1.3/docs/javadocs/"/>
+            <link href="http://kentbeck.github.com/junit/javadoc/latest/"/>
+            
+            <bottom><![CDATA[<i>Copyright &#169; 2010 Agwego Enterprise Inc. Tim Desjardins - All Rights Reserved.</i>]]></bottom>
+        </javadoc>
+    </target>
+</project>
