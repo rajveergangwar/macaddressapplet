@@ -1,0 +1,16 @@
+keytool -genkey \
+        -alias agwegocodesigncert \
+        -keypass myKeyPassword \
+        -keyalg RSA \
+        -keysize 2048 \
+	-validity 5000 \
+        -dname "CN=AGWEGO,O=AGWEGO ENTERPRISES INC.,C=CA,ST=ON,L=Toronto" \
+        -keystore codesigning.keystore \
+        -storepass myStorePassword
+
+jarsigner -verbose \
+        -keystore codesign/codesigning.keystore \
+        -storepass myStorePassword \
+        -keypass myKeyPassword \
+        macaddressapplet.jar \
+        agwegocodesigncert
