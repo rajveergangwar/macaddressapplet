@@ -6,4 +6,6 @@ Singe Java 6 update 22 which closed the native access hole, the Mac Address Appl
 
 == Discussion ==
 
-If you are planning to use this applet or a derivative to commercial applications you will most likely want to use a real code signing certificate to sign your jar file, otherwise you can use a self signed certificate. You can obtain code signing certificates from many sources like [https://www.verisign.com/ VeriSign] or [http://godaddy.com/ Go Daddy] for example.
+If you are planning to use this applet or a derivative for a commercial application you will  want to sign your jar with an official code signing certificate, otherwise you can use a self signed certificate. You can official obtain code signing certificates from many sources like [https://www.verisign.com/ VeriSign] or [http://godaddy.com/ Go Daddy] for example.
+
+There is a default self signed certificate included in the source distribution.
