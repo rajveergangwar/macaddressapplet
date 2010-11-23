@@ -1,8 +1,25 @@
 /*
- * Author: Tim Desjardins
- * Copyright (c) 2008 Agwego Enterprises Inc.
+ * Copyright (c) 2008-2010. Agwego Enterprises Inc.
  *
- * Feel free to use or abuse this code anyway you wish, without warranty of course.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * If you modify this software a credit would be nice
  */
 
 import java.net.NetworkInterface;
@@ -64,7 +81,7 @@ public class MacAddressApplet extends Applet
 	 *
 	 * @return the mac address or undefined
 	 */
-	public static String getMacAddressInternal()
+	protected static String getMacAddressInternal()
 	{
 		try {
 			Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
@@ -91,7 +108,7 @@ public class MacAddressApplet extends Applet
      *
      * @return a JSON array of strings (as a string)
      */
-    public static String getMacAddressesJSONInternal()
+    protected static String getMacAddressesJSONInternal()
     {
         try {
             String macs [] = getMacAddresses();
