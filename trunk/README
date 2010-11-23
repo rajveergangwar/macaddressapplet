@@ -3,11 +3,11 @@
 #
 # timd at agwego dot com
 #
-# Feel free to use or abuse this code anyway you wish, without warranty of course.
+# See License in doc
 #
 #
 
-To build this project, run ant package from the root
+To build this project, run ant package from the root directory
 
 Since Java 6 update 22 you now need to sign your applet to properly access the native methods responsible for accessing the MAC address, otherwise the method calls will return nothing, you can also check the java console for exceptions.
 
@@ -15,5 +15,4 @@ That's it; this is a simple applet to illustrate getting a machines MAC address 
 
 See the web directory for sample html and this is also the install directory so you may test the applet via a browser, copy the web directory to any web server and you should be ready to test.
 
-How to sign your applet, this example will use a self signed exception:wq
 
