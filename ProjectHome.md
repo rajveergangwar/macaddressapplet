@@ -1,0 +1,1 @@
+A simple Java applet to retrieve a machines MAC Address, see [Getting Started](GettingStarted.md)
